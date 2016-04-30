@@ -1,0 +1,91 @@
+/*TODO: refactor rules*/
+Phase: occupation
+Input: Token Split Lookup
+Options: control = appelt
+
+Rule: occupation1
+Priority: 100
+({Token.string==~"(?i)retired|retierd|semi-retired|self-employed"}):pre_context //include for i2b2 data set
+(  
+//{Token.string==~"(?i)retired|retierd|semi-retired|self-employed"} //remove for i2b2 data set. 
+{Lookup.minorType == occupation}
+):label
+-->  
+{  
+AnnotationSet label = bindings.get("label");  
+Annotation personAnn = label.iterator().next();  
+FeatureMap features = Factory.newFeatureMap(); 
+features.put("CATEGORY", "OCCUPATION");   
+outputAS.add(label.firstNode(), label.lastNode(), "OCCUPATION", features);  
+}
+
+Rule: occupation2
+Priority: 99
+(
+{Token.string==~"(?i)redundant|job|work|works|working|worked|trained|also"}({Token.kind=="word"})?({Token.kind=="word"})?{Token.string==~"(?i)as|in"} ({Token.string==~"(?i)a|an"})? ({Token.kind=="word"})?({Token.kind=="word"})?|
+({Token.string==~"(?i)he|she|whom|who"})?{Token.string==~"(?i)is|was"}({Token.string==~"(?i)a|an|the"})?|{Token.string==~"(?i)years?"}{Token.string==~"(?i)old"}({Token.kind=="word"})?| 
+{Token.string==~"(?i)used"}{Token.string==~"(?i)to"}{Token.string==~"(?i)work|be"} {Token.string==~"(?i)as|a"}{Token.string==~"(?i)as|a"}({Token})?({Token})?({Token})?|
+{Token.string==~"(?i)worked"}{Token.string==~"(?i)in"}|
+{Token.string=="is"}{Token.string=="also"}{Token.string=="a"}|
+{Token.string==~"(?i)being|became"}{Token.string==~"(?i)a"}|
+{Token.string==~"(?i)SH|FHSH"}({Token.string==~":|-"})?({Token.string=="a"})?|
+{Token.string==~"(?i)Social"}{Token.string==~"(?i)History"}({Token.string==":"})?({Token.string=="a"})?|
+{Token.string==~"(?i)husband"}|
+{Token.string==~"(?i)married"}{Token.string=="to"}{Token.string=="a"}|
+{Token.string==~"(?i)as|is|owns"}{Token.string==~"(?i)a"}|
+{Token.string==~"(?i)was"}{Token.string==~"(?i)in"}{Token.string==~"(?i)the"}
+):pre_context
+(  
+ ({Token.string==~"(?i)retired?|ex-?"} ({Token.kind=="word"})?)? {Lookup.minorType == occupation}  
+):label
+-->  
+{  
+AnnotationSet label = bindings.get("label");  
+Annotation personAnn = label.iterator().next();  
+FeatureMap features = Factory.newFeatureMap(); 
+features.put("CATEGORY", "OCCUPATION");   
+outputAS.add(label.firstNode(), label.lastNode(), "OCCUPATION", features);  
+}
+
+/*contained within a sentence and nothing else. */
+Rule: occupation3
+Priority: 95
+(
+{Split.kind == internal}
+):pre_context
+(  
+({Token.string==~"(?i)retired|retirement|retirment|retierd|ex-?|semi-retired|self-employed"}|{Token.string==~"(?i)self-?"}{Token.string==~"(?i)employed"})?
+{Lookup.minorType == occupation}
+):label
+-->  
+{  
+AnnotationSet label = bindings.get("label");  
+Annotation personAnn = label.iterator().next();  
+FeatureMap features = Factory.newFeatureMap(); 
+features.put("CATEGORY", "OCCUPATION");   
+outputAS.add(label.firstNode(), label.lastNode(), "OCCUPATION", features);  
+}
+
+/* do not use for for i2b2 data set
+Rule: occupation4
+Priority: 90
+(  
+{Token.string==~"(?i)unemployed|unemployment"}|
+{Token.string==~"(?i)housewife"}|
+{Token.string==~"(?i)house"}{Token.string==~"(?i)wife"}|
+({Token.string==~"(?i)recently"})?{Token.string==~"(?i)retired"}| //remove recently from all annotations in gold set.
+{Token.string==~"(?i)self-?|not"}{Token.string==~"(?i)employed"}|
+{Token.string==~"(?i)not"}({Token.string==~"(?i)currently"})?{Token.string==~"(?i)working"}|
+{Token.string==~"(?i)does"}{Token.string==~"(?i)not|n't"}{Token.string==~"(?i)working|work"}
+):label
+({!Token.string=="requested"}):pos_negation
+-->  
+{  
+AnnotationSet label = bindings.get("label");  
+Annotation personAnn = label.iterator().next();  
+FeatureMap features = Factory.newFeatureMap(); 
+features.put("CATEGORY", "OCCUPATION");   
+outputAS.add(label.firstNode(), label.lastNode(), "OCCUPATION", features);  
+}
+*/
+
