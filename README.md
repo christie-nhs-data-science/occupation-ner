@@ -17,6 +17,6 @@ The Occupation gazetteer (**occupation.lst**) can be found in *plugins\ANNIE\res
 
 If you find this resource useful, please cite the following publication:
 
-	Azad Dehghan, Tom Liptrot, Daniel Tibble, Matthew Barker-Hewitt, Goran Nenadic. 
+	Azad Dehghan, Tom Liptrot, Daniel Tibble, Matthew Barker-Hewitt, Goran Nenadic. Identification of Occupation Mentions in Clinical Narratives.
 	Proceedings of the 21th International Conference on Applications of Natural Language to Information Systems (NLDB 2016). 
 	Salford, United Kingdom, June 22-24, 2016.
